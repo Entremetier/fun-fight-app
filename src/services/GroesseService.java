@@ -2,7 +2,7 @@ package services;
 
 public class GroesseService {
 
-    public int groesseErgebnis(String[] fighter){
+    public static int groesseErgebnis(String[] fighter){
         int groesse = Integer.parseInt(fighter[1]);
         int ergebnis;
 

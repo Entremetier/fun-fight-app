@@ -2,7 +2,7 @@ package services;
 
 public class BMIService {
 
-    public double bmiErgebnis (String[] fighter){
+    public static double bmiErgebnis (String[] fighter){
         double groesse = Integer.parseInt(fighter[1]);
         double gewicht = Integer.parseInt(fighter[2]);
         double ergebnis;

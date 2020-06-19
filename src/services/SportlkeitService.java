@@ -2,7 +2,7 @@ package services;
 
 public class SportlkeitService {
 
-    public int sportlichkeitErgebnis(String[] fighter){
+    public static int sportlichkeitErgebnis(String[] fighter){
         int ergebnis = 0;
 
         switch (fighter[3]) {

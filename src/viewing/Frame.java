@@ -283,94 +283,89 @@ public class Frame extends JFrame {
         JButton fightButton = new JButton("Fight");
         fightButton.setBackground(Color.BLACK);
         fightButton.setForeground(Color.WHITE);
-        fightButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        fightButton.addActionListener(e -> {
 
-                String[] person;
-                String personenData = "";
-                String name1;
-                String name2;
+            String[] person;
+            String personenData = "";
+            String name1;
+            String name2;
 
-                if (personen.getSelectedItems().length != 2) {
-                    emptyLabel2.setText("Zwei Kämpfer auswählen");
+            if (personen.getSelectedItems().length != 2) {
+                emptyLabel2.setText("Zwei Kämpfer auswählen");
+            } else {
+                emptyLabel2.setText("");
+                person = personen.getSelectedItems();
+
+                for (String data : person) {
+                    String[] dataArray = data.split(" ");
+                    personenData += dataArray[1] + " ";
+                }
+                String[] namen = personenData.split(" ");
+                name1 = namen[0];
+                name2 = namen[1];
+
+                redCornerLabel.setText("Red Corner: " + name1);
+                blueCornerLabel.setText("Blue Corner: " + name2);
+                nameTxt.setText("");
+                alterTxt.setText("");
+                groesseTxt.setText("");
+                gewichtTxt.setText("");
+                kampfsportler.setSelected(false);
+                sportlich.setSelected(false);
+                unsportlich.setSelected(false);
+
+                String[] dataArray;
+                String personData = "";
+
+                int kaempfer1;
+                int kaempfer2;
+
+                if (personen.getSelectedItems().length == 1) {
+                    emptyLabel2.setText("Kämpfer auswählen");
                 } else {
-                    emptyLabel2.setText("");
                     person = personen.getSelectedItems();
-
-                    for (String data : person) {
-                        String[] dataArray = data.split(" ");
-                        personenData += dataArray[1] + " ";
+                    for (String daten : person) {
+                        dataArray = daten.split(" ");
+                        personData += dataArray[3] + " " + dataArray[5] + " " + dataArray[7] + " " + dataArray[9] + " ";
                     }
-                    String[] namen = personenData.split(" ");
-                    name1 = namen[0];
-                    name2 = namen[1];
+                }
 
-                    redCornerLabel.setText("Red Corner: " + name1);
-                    blueCornerLabel.setText("Blue Corner: " + name2);
-                    nameTxt.setText("");
-                    alterTxt.setText("");
-                    groesseTxt.setText("");
-                    gewichtTxt.setText("");
-                    kampfsportler.setSelected(false);
-                    sportlich.setSelected(false);
-                    unsportlich.setSelected(false);
+                String[] kaempfer = personData.split(" ");
 
-                    String[] dataArray;
-                    String personData = "";
+                String[] fighter1 = {kaempfer[0], kaempfer[1], kaempfer[2], kaempfer[3]};
+                String[] fighter2 = {kaempfer[4], kaempfer[5], kaempfer[6], kaempfer[7]};
 
-                    if (personen.getSelectedItems().length == 1) {
-                        emptyLabel2.setText("Kämpfer auswählen");
-                    } else {
-                        person = personen.getSelectedItems();
-                        for (String daten : person) {
-                            dataArray = daten.split(" ");
-                            personData += dataArray[3] + " " + dataArray[5] + " " + dataArray[7] + " " + dataArray[9] + " ";
-                        }
-                    }
+                kaempfer1 = AlterService.alterErgebnis(fighter1);
+                kaempfer1 += BMIService.bmiErgebnis(fighter1);
+                kaempfer1 += GroesseService.groesseErgebnis(fighter1);
+                kaempfer1 += SportlkeitService.sportlichkeitErgebnis(fighter1);
 
-                    String[] kaempfer = personData.split(" ");
+                kaempfer2 = AlterService.alterErgebnis(fighter2);
+                kaempfer2 += GroesseService.groesseErgebnis(fighter2);
+                kaempfer2 += BMIService.bmiErgebnis(fighter2);
+                kaempfer2 += SportlkeitService.sportlichkeitErgebnis(fighter2);
 
-                    String[] fighter1 = {kaempfer[0], kaempfer[1], kaempfer[2], kaempfer[3]};
-                    String[] fighter2 = {kaempfer[4], kaempfer[5], kaempfer[6], kaempfer[7]};
+                if (kaempfer1 > kaempfer2) {
+                    siegerLabel.setText(name1);
+                    siegerLabel.setBackground(Color.YELLOW);
 
-                    AlterService alterService = new AlterService();
-                    GroesseService groesseService = new GroesseService();
-                    BMIService bmiService = new BMIService();
-                    SportlkeitService sportlkeitService = new SportlkeitService();
+                    String[] teilnehmer = personen.getSelectedItems();
+                    String verlierer = teilnehmer[1];
+                    gruppe.abmelden(verlierer);
 
-                    int kaempfer1 = alterService.alterErgebnis(fighter1);
-                    kaempfer1 += groesseService.groesseErgebnis(fighter1);
-                    kaempfer1 += bmiService.bmiErgebnis(fighter1);
-                    kaempfer1 += sportlkeitService.sportlichkeitErgebnis(fighter1);
+                } else if (kaempfer1 < kaempfer2) {
+                    siegerLabel.setText(name2);
+                    siegerLabel.setBackground(Color.YELLOW);
 
-                    int kaempfer2 = alterService.alterErgebnis(fighter2);
-                    kaempfer2 += groesseService.groesseErgebnis(fighter2);
-                    kaempfer2 += bmiService.bmiErgebnis(fighter2);
-                    kaempfer2 += sportlkeitService.sportlichkeitErgebnis(fighter2);
-
-                    if (kaempfer1 > kaempfer2) {
-                        siegerLabel.setText(name1);
-                        siegerLabel.setBackground(Color.YELLOW);
-
-                        String[] teilnehmer = personen.getSelectedItems();
-                        String verlierer = teilnehmer[1];
-                        gruppe.abmelden(verlierer);
-
-                    } else if (kaempfer1 < kaempfer2) {
-                        siegerLabel.setText(name2);
-                        siegerLabel.setBackground(Color.YELLOW);
-
-                        String[] teilnehmer = personen.getSelectedItems();
-                        String verlierer = teilnehmer[0];
-                        gruppe.abmelden(verlierer);
-                    } else {
-                        siegerLabel.setText("Kein Sieger");
-                    }
+                    String[] teilnehmer = personen.getSelectedItems();
+                    String verlierer = teilnehmer[0];
+                    gruppe.abmelden(verlierer);
+                } else {
+                    siegerLabel.setText("Kein Sieger");
+                }
 
 //                    System.out.println("Kämpfer1: " + kaempfer1);
 //                    System.out.println("Kämpfer2: " + kaempfer2);
-                }
             }
         });
 
@@ -398,7 +393,7 @@ public class Frame extends JFrame {
         this.add(bottom);
         this.setSize(500, 800);
         this.setLocation(900, 10);
-        this.setTitle("Fight Night");
+        this.setTitle("Fun Fight Application");
         this.setResizable(false);
         this.setVisible(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);

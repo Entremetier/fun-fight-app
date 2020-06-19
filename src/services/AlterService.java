@@ -2,7 +2,7 @@ package services;
 
 public class AlterService {
 
-    public int alterErgebnis(String[] fighter) {
+    public static int alterErgebnis(String[] fighter) {
         int alter = Integer.parseInt(fighter[0]);
         int ergbnis = 0;
         if (alter <= 30) {
